@@ -1,0 +1,20 @@
+h1. Adds PostgreSQL Monitoring to Server Density
+
+h2. Overview
+
+This plugins provides the following monitoring services
+
+* ensures we can connect to the database
+* gets version number
+* gets max connections count
+* gets current connections count
+* gets list of locks
+* gets logfile settings
+
+h2. Installation
+
+* Configure your agent so that it knows about plugins http://www.serverdensity.com/docs/agent/plugins/ 
+* Move PostgreSQL.py into that directory 
+* Add the necessary config settings to your /etc/sd-agent/config.cfg file
+* Restart the agent (service sd-agent restart)
+
