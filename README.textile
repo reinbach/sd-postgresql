@@ -15,6 +15,16 @@ h2. Installation
 
 * Configure your agent so that it knows about plugins http://www.serverdensity.com/docs/agent/plugins/ 
 * Move PostgreSQL.py into that directory 
-* Add the necessary config settings to your /etc/sd-agent/config.cfg file
 * Restart the agent (service sd-agent restart)
 
+h2. Configuration
+
+Add the necessary config settings to your /etc/sd-agent/config.cfg file. Eg,
+
+<pre>
+[PostgreSQL]
+postgres_database = yourdatabase
+postgres_user = username
+postgres_pass = password
+postgres_port = port (optional, default is 5432)
+</pre>
