@@ -136,5 +136,5 @@ class PostgreSQL:
 
     
 if __name__ == "__main__":
-    postgres = Postgres(None, None, None)
+    postgres = PostgreSQL(None, None, None)
     print postgres.run()
