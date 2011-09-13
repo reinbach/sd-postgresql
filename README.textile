@@ -26,5 +26,6 @@ Add the necessary config settings to your /etc/sd-agent/config.cfg file. Eg,
 postgres_database = yourdatabase
 postgres_user = username
 postgres_pass = password
+postgres_host = hostname
 postgres_port = port (optional, default is 5432)
 </pre>
