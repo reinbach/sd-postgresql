@@ -9,6 +9,7 @@ CONFIG_PARAMS = [
     ('postgres_database', 'PostgreSQLDatabase', True),
     ('postgres_user', 'PostgreSQLUser', True),
     ('postgres_pass', 'PostgreSQLPassword', True),
+    ('postgres_host', 'PostgreSQLHost', True),
     ('postgres_port', 'PostgreSQLPort', False),
 ]
 PLUGIN_STATS = [
@@ -68,10 +69,13 @@ class PostgreSQL:
                 database=self.agent_config.get('PostgreSQLDatabase'),
                 user=self.agent_config.get('PostgreSQLUser'),
                 password=self.agent_config.get('PostgreSQLPassword'),
-                port=self.agent_config.get('PostgreSQLPort')
+                port=self.agent_config.get('PostgreSQLPort'),
+                host=self.agent_config.get('PostgreSQLHost')
             )
         except psycopg2.OperationalError, e:
-            self.checks_logger('%s: PostgreSQL connection error: %s' % (PLUGIN_NAME, e))
+            self.checks_logger.error(
+                '%s: PostgreSQL connection error: %s' % (PLUGIN_NAME, e)
+            )
             return False
 
         # get version
@@ -82,7 +86,7 @@ class PostgreSQL:
                 result = cursor.fetchone()
                 self.postgresVersion = result[0].split(' ')[1]
             except psycopg2.OperationalError, e:
-                self.checks_logger(
+                self.checks_logger.error(
                     '%s: SQL query error when gettin version: %s' % (PLUGIN_NAME, e)
                 )
 
@@ -94,7 +98,7 @@ class PostgreSQL:
             )
             self.postgresMaxConnections = cursor.fetchone()[0]
         except psycopg2.OperationalError, e:
-            self.checks_logger(
+            self.checks_logger.error(
                 '%s: SQL query error when getting max connections: %s' % (PLUGIN_NAME, e)
             )
         try:
@@ -102,7 +106,7 @@ class PostgreSQL:
             cursor.execute("SELECT COUNT(datid) FROM pg_database AS d LEFT JOIN pg_stat_activity AS s ON (s.datid = d.oid)")
             self.postgresCurrentConnections = cursor.fetchone()[0]
         except psycopg2.OperationalError, e:
-            self.checks_logger(
+            self.checks_logger.error(
                 '%s: SQL query error when getting current connections: %s' % (PLUGIN_NAME, e)
             )
 
@@ -114,7 +118,7 @@ class PostgreSQL:
             for results in cursor.fetchall():
                 self.postgresLocks.append(results)
         except psycopg2.OperationalError, e:
-            self.checks_logger('%s: SQL query error when getting locks: %s' (PLUGIN_NAME, e))
+            self.checks_logger.error('%s: SQL query error when getting locks: %s' (PLUGIN_NAME, e))
 
         # get logfile info
         try:
@@ -124,7 +128,7 @@ class PostgreSQL:
             for results in cursor.fetchall():
                 self.postgresLogFile.append(results)
         except psycopg2.OperationalError, e:
-            self.checks_logger(
+            self.checks_logger.error(
                 '%s: SQL query error when checking log file settings: %s' % (PLUGIN_NAME, e)
             )
 
